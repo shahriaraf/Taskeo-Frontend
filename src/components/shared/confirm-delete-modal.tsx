@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription, DialogFooter,
@@ -10,7 +9,6 @@ import { AlertTriangle } from "lucide-react";
 interface ConfirmDeleteModalProps {
   open: boolean;
   onClose: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onConfirm: () => any;
   title: string;
   description?: string;

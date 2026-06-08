@@ -149,13 +149,11 @@ export function Sidebar() {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 h-14 border-b border-[var(--border-subtle)] flex-shrink-0">
-        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-violet)] flex items-center justify-center flex-shrink-0 shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+          <svg style={{ width: 30, height: 30 }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
             <polygon points="22,22 60,22 44,44 22,44" />
             <rect x="63" y="22" width="22" height="22" />
             <polygon points="44,50 63,44 63,80 44,80" />
           </svg>
-        </div>
         {sidebarOpen && (
           <span className="text-sm font-bold text-[var(--text-primary)] whitespace-nowrap animate-fade-in">
             Taskeo

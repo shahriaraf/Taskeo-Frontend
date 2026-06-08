@@ -21,7 +21,6 @@ const schema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters").max(300),
   description: z.string().max(2000).optional(),
   projectId: z.string().uuid("Please select a project"),
-  // ✅ Fix: transform empty string to undefined, then validate as UUID only if present
   assigneeId: z
     .string()
     .optional()
@@ -86,8 +85,6 @@ export function TaskFormModal({
     ? (projectsData!.data!.data as unknown as Project[])
     : [];
 
-  // Load members via React Query — uses the same query key that add-member-modal
-  // invalidates after a successful add, so this list refreshes automatically.
   const { data: membersData } = useQuery({
     queryKey: ["project-members", watchedProjectId],
     queryFn: () => teamApi.getMembers(watchedProjectId!),
@@ -167,7 +164,6 @@ export function TaskFormModal({
                   id="projectId"
                   {...register("projectId")}
                   error={errors.projectId?.message}
-                  // ✅ Disable project select in edit mode
                   disabled={isEdit}
                 >
                   <option value="">Select project</option>

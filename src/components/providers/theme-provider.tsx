@@ -1,4 +1,3 @@
-// src/components/providers/theme-provider.tsx
 "use client";
 import { useEffect } from "react";
 import { useThemeStore } from "@/store/theme.store";
