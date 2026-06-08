@@ -323,7 +323,13 @@ export default function ProjectDetailPage() {
         <TaskFormModal
           open={taskFormOpen}
           onClose={() => setTaskFormOpen(false)}
-          onSubmit={(d) => createTaskMutation.mutateAsync(d)}
+          onSubmit={(d) =>
+            createTaskMutation.mutateAsync({
+              ...d,
+              // ensure assigneeId is undefined instead of null to satisfy mutation typing
+              assigneeId: d.assigneeId ?? undefined,
+            })
+          }
           defaultProjectId={id}
           loading={createTaskMutation.isPending}
         />
@@ -333,7 +339,16 @@ export default function ProjectDetailPage() {
         <TaskFormModal
           open={!!editTask}
           onClose={() => setEditTask(null)}
-          onSubmit={(d) => updateTaskMutation.mutateAsync({ tid: editTask!.id, data: d })}
+          onSubmit={(d) =>
+            updateTaskMutation.mutateAsync({
+              tid: editTask!.id,
+              data: {
+                ...d,
+                // ensure assigneeId is undefined instead of null to satisfy mutation typing
+                assigneeId: d.assigneeId ?? undefined,
+              },
+            })
+          }
           initialData={editTask || undefined}
           loading={updateTaskMutation.isPending}
         />

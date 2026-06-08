@@ -385,7 +385,7 @@ export default function TaskDetailPage() {
         <TaskFormModal
           open={editOpen}
           onClose={() => setEditOpen(false)}
-          onSubmit={(d) => updateMutation.mutateAsync(d)}
+          onSubmit={(d) => updateMutation.mutateAsync(Object.fromEntries(Object.entries(d).filter(([, v]) => v !== null)))}
           initialData={task}
           loading={updateMutation.isPending}
         />

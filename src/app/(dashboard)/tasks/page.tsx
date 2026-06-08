@@ -432,7 +432,7 @@ export default function TasksPage() {
         <TaskFormModal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          onSubmit={(d) => createMutation.mutateAsync(d)}
+          onSubmit={(d) => createMutation.mutateAsync({ ...d, assigneeId: d.assigneeId ?? undefined })}
           loading={createMutation.isPending}
         />
       )}
@@ -441,7 +441,7 @@ export default function TasksPage() {
         <TaskFormModal
           open={!!editTask}
           onClose={() => setEditTask(null)}
-          onSubmit={(d) => updateMutation.mutateAsync({ id: editTask!.id, d })}
+          onSubmit={(d) => updateMutation.mutateAsync({ id: editTask!.id, d: { ...d, assigneeId: d.assigneeId ?? undefined } })}
           initialData={editTask || undefined}
           loading={updateMutation.isPending}
         />
