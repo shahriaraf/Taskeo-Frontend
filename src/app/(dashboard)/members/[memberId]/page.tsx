@@ -46,13 +46,13 @@ const STATUS_CONFIG = {
   },
   in_progress: {
     label: "In Progress",
-    color: "blue" as const,
+    color: "info" as const,
     icon: Clock,
     dotColor: "#4f8ef7",
   },
   completed: {
     label: "Completed",
-    color: "green" as const,
+    color: "success" as const,
     icon: CheckCircle2,
     dotColor: "#34d399",
   },
@@ -61,13 +61,13 @@ const STATUS_CONFIG = {
 const PRIORITY_CONFIG = {
   high: {
     label: "High",
-    color: "red" as const,
+    color: "danger" as const,
     icon: Flame,
     dotColor: "#f87171",
   },
   medium: {
     label: "Medium",
-    color: "amber" as const,
+    color: "warning" as const,
     icon: Minus,
     dotColor: "#fbbf24",
   },
