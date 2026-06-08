@@ -25,7 +25,9 @@ const schema = z.object({
   assigneeId: z
     .string()
     .optional()
-    .transform((val) => (val === "" ? undefined : val)),
+    .transform((val) => (val === "" ? undefined : val))
+    .nullable()
+    .optional(),
   dueDate: z.string().min(1, "Due date is required"),
   priority: z.enum(["high", "medium", "low"]),
   status: z.enum(["todo", "in_progress", "completed"]),
