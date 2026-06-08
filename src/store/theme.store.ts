@@ -15,6 +15,6 @@ export const useThemeStore = create<ThemeStore>()(
       toggleTheme: () => set((s) => ({ isDark: !s.isDark })),
       setDark: (dark) => set({ isDark: dark }),
     }),
-    { name: "flowboard-theme" }
+    { name: "taskeo-theme" }
   )
 );

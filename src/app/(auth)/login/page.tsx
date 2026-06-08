@@ -65,9 +65,13 @@ export default function LoginPage() {
       {/* Logo */}
       <div className="flex items-center justify-center gap-2.5 mb-8">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-violet)] flex items-center justify-center shadow-lg shadow-blue-500/20">
-          <Zap className="w-4.5 h-4.5 text-white" style={{ width: 18, height: 18 }} />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+            <polygon points="22,22 60,22 44,44 22,44" />
+            <rect x="63" y="22" width="22" height="22" />
+            <polygon points="44,50 63,44 63,80 44,80" />
+          </svg>
         </div>
-        <span className="text-xl font-bold text-[var(--text-primary)]">FlowBoard</span>
+        <span className="text-xl font-bold text-[var(--text-primary)]">Taskeo</span>
       </div>
 
       <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] p-8 shadow-2xl">

@@ -13,7 +13,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Activity,
-  Zap,
   Users2,
   Group,
 } from "lucide-react";
@@ -135,7 +134,7 @@ export function Sidebar() {
   const handleLogout = async () => {
     try {
       await authApi.logout();
-    } catch {}
+    } catch { }
     logout();
     router.push("/login");
     toast.success("Logged out");
@@ -151,11 +150,15 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 h-14 border-b border-[var(--border-subtle)] flex-shrink-0">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-violet)] flex items-center justify-center flex-shrink-0 shadow-lg">
-          <Zap className="w-3.5 h-3.5 text-white" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+            <polygon points="22,22 60,22 44,44 22,44" />
+            <rect x="63" y="22" width="22" height="22" />
+            <polygon points="44,50 63,44 63,80 44,80" />
+          </svg>
         </div>
         {sidebarOpen && (
           <span className="text-sm font-bold text-[var(--text-primary)] whitespace-nowrap animate-fade-in">
-            FlowBoard
+            Taskeo
           </span>
         )}
       </div>
@@ -287,8 +290,8 @@ export function Sidebar() {
                   role === "admin"
                     ? "bg-rose-400"
                     : role === "project_manager"
-                    ? "bg-amber-400"
-                    : "bg-blue-400"
+                      ? "bg-amber-400"
+                      : "bg-blue-400"
                 )}
               />
             </div>

@@ -143,9 +143,9 @@ function MemberCard({
             <Badge
               variant={
                 member.user.role === "admin"
-                  ? "purple"
+                  ? "danger"
                   : member.user.role === "project_manager"
-                  ? "blue"
+                  ? "info"
                   : "default"
               }
               className="mt-1 text-[10px] py-0"

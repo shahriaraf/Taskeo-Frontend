@@ -5,7 +5,7 @@ import { Providers } from "./providers";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export const metadata: Metadata = {
-  title: "FlowBoard — Smart Project & Task Management",
+  title: "Taskeo — Smart Project & Task Management",
   description: "A production-grade project management system for modern teams.",
 };
 
