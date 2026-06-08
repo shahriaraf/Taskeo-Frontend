@@ -387,18 +387,11 @@ export default function MemberDetailPage() {
       <Header
         title={memberInfo ? `${memberInfo.name}'s Tasks` : "Member Tasks"}
         subtitle={`Viewing task breakdown for this team member`}
-        actions={
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
-                       bg-[var(--bg-surface)] border border-[var(--border-subtle)]
-                       text-[var(--text-muted)] hover:text-[var(--text-primary)]
-                       hover:border-[var(--accent-blue)] transition-all"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back
-          </button>
-        }
+        action={{
+          label: "Back",
+          onClick: () => router.back(),
+          icon: <ArrowLeft style={{ width: 14, height: 14 }} />,
+        }}
       />
 
       <div className="flex-1 overflow-y-auto p-6 space-y-5">
@@ -436,9 +429,9 @@ export default function MemberDetailPage() {
                       <Badge
                         variant={
                           memberInfo.role === "admin"
-                            ? "purple"
+                            ? "danger"
                             : memberInfo.role === "project_manager"
-                            ? "blue"
+                            ? "info"
                             : "default"
                         }
                         className="mt-1.5"
