@@ -425,18 +425,18 @@ export default function MemberDetailPage() {
                         {memberInfo.email}
                       </p>
                     )}
-                    {memberInfo?.role && (
+                    {(memberInfo as any)?.role && (
                       <Badge
                         variant={
-                          memberInfo.role === "admin"
+                          (memberInfo as any).role === "admin"
                             ? "danger"
-                            : memberInfo.role === "project_manager"
+                            : (memberInfo as any).role === "project_manager"
                             ? "info"
                             : "default"
                         }
                         className="mt-1.5"
                       >
-                        {memberInfo.role.replace("_", " ")}
+                        {(memberInfo as any).role.replace("_", " ")}
                       </Badge>
                     )}
                   </div>
