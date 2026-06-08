@@ -144,11 +144,11 @@ export function Sidebar() {
     <aside
       className={cn(
         "relative flex flex-col h-full bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] sidebar-transition overflow-hidden flex-shrink-0",
-        sidebarOpen ? "w-56" : "w-[60px]"
+        sidebarOpen ? "w-42" : "w-[76px]"
       )}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 h-14 border-b border-[var(--border-subtle)] flex-shrink-0">
+      <div className="flex items-center gap-3 px-6 h-14 border-b border-[var(--border-subtle)] flex-shrink-0">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-violet)] flex items-center justify-center flex-shrink-0 shadow-lg">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
             <polygon points="22,22 60,22 44,44 22,44" />
@@ -164,7 +164,7 @@ export function Sidebar() {
       </div>
 
       {/* Nav items */}
-      <nav className="flex-1 py-4 px-2 overflow-y-auto overflow-x-hidden">
+      <nav className="flex-1 py-7 px-[18px] overflow-y-auto overflow-x-hidden">
         <div className="space-y-0.5">
           {visibleNav.map((item) => {
             const isActive =
@@ -222,7 +222,7 @@ export function Sidebar() {
                   )}
                 >
                   <item.icon
-                    style={{ width: 18, height: 18 }}
+                    style={{ width: 19, height: 19 }}
                     className="flex-shrink-0"
                   />
                   {sidebarOpen && (
