@@ -15,6 +15,9 @@ import {
   Activity,
   Users2,
   Group,
+  Flame,
+  FileSearch,
+  TimerReset
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth.store";
@@ -76,6 +79,24 @@ const NAV_ITEMS: NavItem[] = [
     label: "Analytics",
     // TM only sees their own task stats — not useful enough to show
     roles: ["admin", "project_manager"],
+  },
+   {
+    href: "/burnout",
+    icon: Flame,
+    label: "Burnout watch",
+    roles: ["admin", "project_manager"],
+  },
+  {
+    href: "/postmortem",
+    icon: FileSearch,
+    label: "Post-mortem",
+    roles: ["admin", "project_manager"],
+  },
+  {
+    href: "/focus",
+    icon: TimerReset,
+    label: "Focus mode",
+    roles: ALL_ROLES,
   },
   {
     href: "/activity",

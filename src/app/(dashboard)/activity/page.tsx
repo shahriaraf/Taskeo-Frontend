@@ -2,7 +2,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Activity } from "lucide-react";
-import { activityLogsApi } from "@/services/api";
+import { activityApi } from "@/services/api";
 import { Header } from "@/components/layout/header";
 import { Skeleton, EmptyState, Avatar } from "@/components/ui";
 import { timeAgo } from "@/lib/utils";
@@ -25,7 +25,7 @@ const actionEmoji: Record<string, string> = {
 export default function ActivityPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["activity-logs-full"],
-    queryFn: () => activityLogsApi.getAll({ limit: 50 }),
+    queryFn: () => activityApi.getAll({ limit: 50 }),
   });
 
   type LogEntry = {

@@ -1,15 +1,11 @@
+// src/services/api.ts  (Phase 1 additions — append/replace the relevant sections)
+// Add these exports to your existing api.ts file.
+// The sections marked NEW are the only additions.
+
 import apiClient from "@/lib/api-client";
 import type {
-  ApiResponse,
-  LoginResponse,
-  User,
-  Project,
-  Task,
-  Comment,
-  Attachment,
-  Notification,
-  ActivityLog,
-  DashboardData,
+  ApiResponse, LoginResponse, User, Project, Task,
+  Comment, Attachment, Notification, ActivityLog, DashboardData,
 } from "@/types";
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -29,6 +25,13 @@ export const authApi = {
 
   refresh: (userId: string) =>
     apiClient.post<ApiResponse<{ accessToken: string }>>("/auth/refresh", { userId }),
+
+  // ── NEW ──────────────────────────────────────────────────────────────────────
+  forgotPassword: (email: string) =>
+    apiClient.post<ApiResponse<{ message: string }>>("/auth/forgot-password", { email }),
+
+  resetPassword: (token: string, password: string) =>
+    apiClient.post<ApiResponse<{ message: string }>>("/auth/reset-password", { token, password }),
 };
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
@@ -39,32 +42,18 @@ export const projectsApi = {
   getOne: (id: string) =>
     apiClient.get<ApiResponse<Project>>(`/projects/${id}`),
 
-  create: (data: {
-    name: string;
-    description?: string;
-    deadline: string;
-    status?: string;
-  }) => apiClient.post<ApiResponse<Project>>("/projects", data),
+  create: (data: { name: string; description?: string; deadline: string; status?: string }) =>
+    apiClient.post<ApiResponse<Project>>("/projects", data),
 
-  update: (
-    id: string,
-    data: Partial<{
-      name: string;
-      description: string;
-      deadline: string;
-      status: string;
-    }>
-  ) => apiClient.patch<ApiResponse<Project>>(`/projects/${id}`, data),
+  update: (id: string, data: Partial<{ name: string; description: string; deadline: string; status: string }>) =>
+    apiClient.patch<ApiResponse<Project>>(`/projects/${id}`, data),
 
   remove: (id: string) => apiClient.delete(`/projects/${id}`),
 
   getStats: (id: string) =>
     apiClient.get<ApiResponse<{
-      totalTasks: number;
-      completedTasks: number;
-      pendingTasks: number;
-      overdueTasks: number;
-      completionPercentage: number;
+      totalTasks: number; completedTasks: number; pendingTasks: number;
+      overdueTasks: number; completionPercentage: number;
     }>>(`/projects/${id}/stats`),
 };
 
@@ -77,145 +66,50 @@ export const tasksApi = {
     apiClient.get<ApiResponse<Task>>(`/tasks/${id}`),
 
   create: (data: {
-    title: string;
-    description?: string;
-    projectId: string;
-    assigneeId?: string;
-    dueDate: string;
-    priority: string;
-    status?: string;
+    title: string; description?: string; projectId: string;
+    assigneeId?: string; dueDate: string; priority?: string; status?: string;
   }) => apiClient.post<ApiResponse<Task>>("/tasks", data),
 
-  update: (
-    id: string,
-    data: Partial<{
-      title: string;
-      description: string;
-      assigneeId: string;
-      dueDate: string;
-      priority: string;
-      status: string;
-    }>
-  ) => apiClient.patch<ApiResponse<Task>>(`/tasks/${id}`, data),
+  update: (id: string, data: Partial<{
+    title: string; description: string; assigneeId: string;
+    dueDate: string; priority: string; status: string;
+  }>) => apiClient.patch<ApiResponse<Task>>(`/tasks/${id}`, data),
 
-  updateStatus: (id: string, status: string) =>
+  updateTaskStatus: (id: string, status: string) =>
     apiClient.patch<ApiResponse<Task>>(`/tasks/${id}/status`, { status }),
 
   remove: (id: string) => apiClient.delete(`/tasks/${id}`),
-};
 
-// ─── Team ─────────────────────────────────────────────────────────────────────
-export const teamApi = {
-  addMember: (data: { projectId: string; userId: string; role?: string }) =>
-    apiClient.post("/team/members", data),
+  // ── NEW: Sub-tasks ──────────────────────────────────────────────────────────
+  getSubTasks: (parentTaskId: string) =>
+    apiClient.get<ApiResponse<Task[]>>(`/tasks/${parentTaskId}/subtasks`),
 
-  getMembers: (projectId: string) =>
-    apiClient.get<ApiResponse<unknown[]>>(`/team/project/${projectId}/members`),
+  createSubTask: (
+    parentTaskId: string,
+    data: { title: string; description?: string; assigneeId?: string; dueDate: string; priority?: string }
+  ) => apiClient.post<ApiResponse<Task>>(`/tasks/${parentTaskId}/subtasks`, data),
 
-  getWorkload: (projectId: string) =>
-    apiClient.get<ApiResponse<unknown[]>>(`/team/project/${projectId}/workload`),
+  updateSubTask: (
+    parentTaskId: string,
+    subTaskId: string,
+    data: Partial<{ title: string; description: string; assigneeId: string; dueDate: string; priority: string; status: string }>
+  ) => apiClient.patch<ApiResponse<Task>>(`/tasks/${parentTaskId}/subtasks/${subTaskId}`, data),
 
-  updateRole: (projectId: string, userId: string, role: string) =>
-    apiClient.patch(`/team/project/${projectId}/members/${userId}/role`, { role }),
+  updateSubTaskStatus: (subTaskId: string, status: string) =>
+    // Sub-task status uses the same PATCH /tasks/:id/status endpoint
+    apiClient.patch<ApiResponse<Task>>(`/tasks/${subTaskId}/status`, { status }),
 
-  removeMember: (projectId: string, userId: string) =>
-    apiClient.delete(`/team/project/${projectId}/members/${userId}`),
+  deleteSubTask: (parentTaskId: string, subTaskId: string) =>
+    apiClient.delete(`/tasks/${parentTaskId}/subtasks/${subTaskId}`),
 
-  searchUsers: (q: string) =>
-    apiClient.get<ApiResponse<User[]>>("/team/users/search", { params: { q } }),
-
-  getMemberTasks: (memberId: string, params?: Record<string, unknown>) =>
-    apiClient.get<ApiResponse<Task[]>>("/tasks", {
-      params: { assigneeId: memberId, ...params }
-    }),
-
-  getMemberById: (memberId: string) =>
-    apiClient.get<ApiResponse<User>>(`/users/${memberId}`),
-};
-
-// ─── Users ────────────────────────────────────────────────────────────────────
-export const usersApi = {
-  getAll: (params?: Record<string, unknown>) =>
-    apiClient.get<ApiResponse<{ users: User[]; total: number }>>("/users", { params }),
-
-  getOne: (id: string) => apiClient.get<ApiResponse<User>>(`/users/${id}`),
-
-  update: (id: string, data: Partial<User>) =>
-    apiClient.patch<ApiResponse<User>>(`/users/${id}`, data),
-
-  getStats: (id: string) =>
-    apiClient.get<ApiResponse<{ total: number; completed: number; inProgress: number; todo: number; overdue: number }>>(`/users/${id}/stats`),
-};
-
-// ─── Notifications ────────────────────────────────────────────────────────────
-export const notificationsApi = {
-  getAll: (params?: { page?: number; limit?: number }) =>
-    apiClient.get<ApiResponse<{ notifications: Notification[]; total: number; unreadCount: number }>>("/notifications", { params }),
-
-  markAsRead: (id: string) => apiClient.patch(`/notifications/${id}/read`),
-
-  markAllAsRead: () => apiClient.patch("/notifications/read-all"),
-};
-
-// ─── Activity Logs ────────────────────────────────────────────────────────────
-export const activityLogsApi = {
-  getAll: (params?: { page?: number; limit?: number }) =>
-    apiClient.get<ApiResponse<{ logs: ActivityLog[]; total: number }>>(
-      "/activity-logs",
-      { params }
-    ),
-
-  getByEntity: (entityType: string, entityId: string) =>
-    apiClient.get<ApiResponse<ActivityLog[]>>(
-      `/activity-logs/entity/${entityType}/${entityId}`
-    ),
-};
-
-// ─── Analytics ────────────────────────────────────────────────────────────────
-export const analyticsApi = {
-  getDashboard: () =>
-    apiClient.get<ApiResponse<DashboardData>>("/analytics/dashboard"),
-
-  getKPIs: () =>
-    apiClient.get<ApiResponse<DashboardData["kpis"]>>("/analytics/kpis"),
-
-  getTasksByPriority: () =>
-    apiClient.get<ApiResponse<{ priority: string; count: number }[]>>(
-      "/analytics/tasks-by-priority"
-    ),
-
-  getStatusDistribution: () =>
-    apiClient.get<ApiResponse<{ status: string; count: number }[]>>(
-      "/analytics/task-status-distribution"
-    ),
-
-  getMemberWorkload: () =>
-    apiClient.get<ApiResponse<{
-      user: { id: string; name: string; avatarUrl?: string };
-      totalTasks: number;
-      completedTasks: number;
-      pendingTasks: number;
-    }[]>>("/analytics/member-workload"),
-
-  getUpcomingDeadlines: () =>
-    apiClient.get<ApiResponse<Task[]>>("/analytics/upcoming-deadlines"),
-
-  getHighPriorityTasks: () =>
-    apiClient.get<ApiResponse<Task[]>>("/analytics/high-priority-tasks"),
-
-  getProjectProgress: () =>
-    apiClient.get<ApiResponse<unknown[]>>("/analytics/project-progress"),
-
-  getProgressTrend: () =>
-    apiClient.get<ApiResponse<{ week: string; created: number; completed: number }[]>>(
-      "/analytics/progress-trend"
-    ),
+  reorderSubTasks: (parentTaskId: string, ids: string[]) =>
+    apiClient.patch(`/tasks/${parentTaskId}/subtasks/reorder`, { ids }),
 };
 
 // ─── Comments ─────────────────────────────────────────────────────────────────
 export const commentsApi = {
   getByTask: (taskId: string, params?: { page?: number; limit?: number }) =>
-    apiClient.get<ApiResponse<{ comments: Comment[]; total: number }>>(`/comments/task/${taskId}`, { params }),
+    apiClient.get<ApiResponse<Comment[]>>(`/comments/task/${taskId}`, { params }),
 
   create: (data: { taskId: string; content: string }) =>
     apiClient.post<ApiResponse<Comment>>("/comments", data),
@@ -226,20 +120,73 @@ export const commentsApi = {
   remove: (id: string) => apiClient.delete(`/comments/${id}`),
 };
 
-// ─── Attachments ──────────────────────────────────────────────────────────────
-export const attachmentsApi = {
-  getByTask: (taskId: string) =>
-    apiClient.get<ApiResponse<Attachment[]>>(`/attachments/task/${taskId}`),
+// ─── Notifications ─────────────────────────────────────────────────────────────
+export const notificationsApi = {
+  getAll: (params?: { page?: number; limit?: number; unreadOnly?: boolean }) =>
+    apiClient.get<ApiResponse<Notification[]>>("/notifications", { params }),
 
+  markRead: (id: string) =>
+    apiClient.patch(`/notifications/${id}/read`),
+
+  markAllRead: () => apiClient.patch("/notifications/read-all"),
+
+  remove: (id: string) => apiClient.delete(`/notifications/${id}`),
+};
+
+// ─── Activity Logs ─────────────────────────────────────────────────────────────
+export const activityApi = {
+  getAll: (params?: Record<string, unknown>) =>
+    apiClient.get<ApiResponse<ActivityLog[]>>("/activity-logs", { params }),
+};
+
+// ─── Analytics ─────────────────────────────────────────────────────────────────
+export const analyticsApi = {
+  getDashboard: () =>
+    apiClient.get<ApiResponse<DashboardData>>("/analytics/dashboard"),
+};
+
+// ─── Team ─────────────────────────────────────────────────────────────────────
+export const teamApi = {
+  getAll: (params?: Record<string, unknown>) =>
+    apiClient.get<ApiResponse<User[]>>("/team", { params }),
+};
+
+// ─── Attachments ─────────────────────────────────────────────────────────────
+export const attachmentsApi = {
   upload: (taskId: string, file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("taskId", taskId);
-    return apiClient.post<ApiResponse<Attachment>>("/attachments/upload", formData, {
+    const form = new FormData();
+    form.append("file", file);
+    return apiClient.post<ApiResponse<Attachment>>(`/attachments/${taskId}`, form, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
+  remove: (id: string) => apiClient.delete(`/attachments/${id}`),
+};
 
-  remove: (id: string) =>
-    apiClient.delete(`/attachments/${id}`),
+// ─── NEW: Global Search ───────────────────────────────────────────────────────
+export const searchApi = {
+  search: (q: string, limit = 5) =>
+    apiClient.get<ApiResponse<{
+      tasks: any[];
+      projects: any[];
+      total: number;
+    }>>("/search", { params: { q, limit } }),
+};
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+export const usersApi = {
+  getAll: (params?: Record<string, unknown>) =>
+    apiClient.get<ApiResponse<{ users: User[] }>>("/users", { params }),
+
+  getOne: (id: string) =>
+    apiClient.get<ApiResponse<User>>(`/users/${id}`),
+
+  getStats: (id: string) =>
+    apiClient.get<ApiResponse<{
+      total: number;
+      completed: number;
+      pending: number;
+      overdue: number;
+      completionPercentage: number;
+    }>>(`/users/${id}/stats`),
 };

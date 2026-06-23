@@ -5,7 +5,6 @@ import {
   FolderKanban, CheckSquare, Clock, AlertTriangle,
   TrendingUp, ArrowRight, Activity, Plus,
 } from "lucide-react";
-import { analyticsApi, activityLogsApi } from "@/services/api";
 import { useAuthStore } from "@/store/auth.store";
 import { Header } from "@/components/layout/header";
 import { KPICard } from "@/components/dashboard/kpi-card";
@@ -19,6 +18,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, Legend,
 } from "recharts";
+import { activityApi, analyticsApi } from "@/services/api";
 
 const COLORS = ["#4f8ef7", "#34d399", "#fbbf24", "#f87171", "#8b5cf6"];
 
@@ -33,9 +33,8 @@ export default function DashboardPage() {
 
   const { data: logsData } = useQuery({
     queryKey: ["activity-logs"],
-    queryFn: () => activityLogsApi.getAll({ limit: 8 }),
+    queryFn: () => activityApi.getAll({ limit: 8 }),
   });
-
 
   const { data: priorityApiData } = useQuery({
     queryKey: ["tasks-by-priority"],
