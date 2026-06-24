@@ -158,15 +158,15 @@ export default function ProjectsPage() {
               ))}
             </div>
 
-            {meta && meta.totalPages > 1 && (
+            {meta && (meta?.totalPages ?? 0) > 1 && (
               <div className="flex items-center justify-center gap-2 mt-8">
                 <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
                   Previous
                 </Button>
                 <span className="text-xs text-[var(--text-muted)]">
-                  Page {page} of {meta.totalPages}
+                  Page {page} of {meta?.totalPages ?? 0}
                 </span>
-                <Button variant="secondary" size="sm" disabled={page >= meta.totalPages} onClick={() => setPage((p) => p + 1)}>
+                <Button variant="secondary" size="sm" disabled={page >= (meta?.totalPages ?? 0)} onClick={() => setPage((p) => p + 1)}>
                   Next
                 </Button>
               </div>

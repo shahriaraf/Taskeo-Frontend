@@ -8,7 +8,7 @@ import { Input, Label, Avatar } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { authApi } from "@/services/api";
+import { authApi, usersApi } from "@/services/api";
 
 export default function SettingsPage() {
   const router = useRouter();

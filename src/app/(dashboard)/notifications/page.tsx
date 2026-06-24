@@ -32,12 +32,12 @@ export default function NotificationsPage() {
   const unreadCount = (data?.data?.data as unknown as { unreadCount: number })?.unreadCount || 0;
 
   const markReadMutation = useMutation({
-    mutationFn: (id: string) => notificationsApi.markAsRead(id),
+    mutationFn: (id: string) => notificationsApi.markRead(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["notifications"] }),
   });
 
   const markAllMutation = useMutation({
-    mutationFn: () => notificationsApi.markAllAsRead(),
+    mutationFn: () => notificationsApi.markAllRead(),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["notifications"] });
       qc.invalidateQueries({ queryKey: ["notifications-count"] });
