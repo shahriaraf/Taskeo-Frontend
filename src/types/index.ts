@@ -115,10 +115,29 @@ export interface ActivityLog {
 }
 
 export interface DashboardData {
-  stats: { totalProjects: number; activeTasks: number; completedTasks: number; teamMembers: number };
-  recentActivity: ActivityLog[];
-  upcomingDeadlines: Task[];
-  projectProgress: { projectId: string; projectName: string; completionPercentage: number; totalTasks: number; completedTasks: number }[];
+  kpis: {
+    totalProjects: number;
+    totalTasks: number;
+    completedTasks: number;
+    pendingTasks: number;
+    overdueTasks: number;
+    completionRate?: number;
+  };
+  // Add other fields your dashboard page accesses on `dash`
+  // For example:
+  upcomingDeadlines?: Array<{
+    id: string;
+    title: string;
+    dueDate: string;
+    project: { id: string; name: string };
+  }>;
+  recentProjects?: Array<{
+    id: string;
+    name: string;
+    completionPercentage: number;
+  }>;
+  tasksByStatus?: Array<{ status: string; count: number }>;
+  tasksByPriority?: Array<{ priority: string; count: number }>;
 }
 
 export interface ApiResponse<T = unknown> {
