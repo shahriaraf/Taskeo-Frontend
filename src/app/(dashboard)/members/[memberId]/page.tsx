@@ -412,7 +412,7 @@ export default function MemberDetailPage() {
                 <div className="flex items-center gap-4 flex-1 min-w-0">
                   <Avatar
                     name={memberInfo?.name || "Member"}
-                    src={memberInfo?.avatarUrl}
+                    src={memberInfo?.avatarUrl || undefined}
                     size="xl"
                     className="rounded-2xl flex-shrink-0"
                   />
@@ -420,9 +420,9 @@ export default function MemberDetailPage() {
                     <h2 className="text-xl font-bold text-[var(--text-primary)] truncate">
                       {memberInfo?.name || "Team Member"}
                     </h2>
-                    {memberInfo?.email && (
+                    {(memberInfo as any)?.email && (
                       <p className="text-sm text-[var(--text-muted)] truncate">
-                        {memberInfo.email}
+                        {(memberInfo as any).email}
                       </p>
                     )}
                     {(memberInfo as any)?.role && (
