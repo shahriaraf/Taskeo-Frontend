@@ -49,10 +49,12 @@ export default function DashboardPage() {
 
   const dash = dashData?.data?.data;
   const kpis = dash?.kpis;
-  const logs = logsData?.data?.data || [];
+const logs = Array.isArray(logsData?.data?.data) ? logsData.data.data : [];
 
   // Chart data
-  const rawPriority = (priorityApiData?.data?.data as { priority: string; count: number }[]) || [];
+ const rawPriority = Array.isArray(priorityApiData?.data?.data)
+  ? (priorityApiData.data.data as { priority: string; count: number }[])
+  : [];
 
   const priorityData = [
     {
@@ -85,7 +87,9 @@ export default function DashboardPage() {
       { week: "W6", completed: 0, created: 0 },
     ];
 
-  const memberWorkload = dash?.memberWorkload?.slice(0, 5) || [];
+const memberWorkload = Array.isArray(dash?.memberWorkload)
+  ? dash.memberWorkload.slice(0, 5)
+  : [];
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -248,7 +252,7 @@ export default function DashboardPage() {
                 />
               ) : (
                 <div className="space-y-3">
-                  {dash?.projectSummaries?.slice(0, 5).map((p) => (
+                 {(Array.isArray(dash?.projectSummaries) ? dash.projectSummaries : []).slice(0, 5).map((p) => (
                     <div
                       key={p.id}
                       className="flex items-center gap-4 p-3 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] hover:border-[var(--border-default)] cursor-pointer transition-colors group"
