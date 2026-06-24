@@ -153,29 +153,44 @@ export const analyticsApi = {
   getDashboard: () =>
     apiClient.get<ApiResponse<DashboardData>>("/analytics/dashboard"),
 
+  getKPIs: () =>
+    apiClient.get<ApiResponse<{
+      totalProjects: number;
+      totalTasks: number;
+      completedTasks: number;
+      pendingTasks: number;
+      overdueTasks: number;
+    }>>("/analytics/kpis"),
+
   getTasksByPriority: () =>
     apiClient.get<ApiResponse<{ priority: string; count: number }[]>>(
       "/analytics/tasks-by-priority"
     ),
 
+  // ← was "/analytics/status-distribution" — fixed to match backend route
   getStatusDistribution: () =>
     apiClient.get<ApiResponse<{ status: string; count: number }[]>>(
-      "/analytics/status-distribution"
-    ),
-
-  getProgressTrend: (params?: { weeks?: number }) =>
-    apiClient.get<ApiResponse<{ week: string; created: number; completed: number }[]>>(
-      "/analytics/progress-trend",
-      { params }
+      "/analytics/task-status-distribution"
     ),
 
   getMemberWorkload: () =>
     apiClient.get<ApiResponse<{
-      user: { id: string; name: string; avatarUrl?: string };
+      user: { id: string; name: string; avatarUrl: string | null };
       totalTasks: number;
       completedTasks: number;
       pendingTasks: number;
     }[]>>("/analytics/member-workload"),
+
+  getUpcomingDeadlines: () =>
+    apiClient.get<ApiResponse<unknown[]>>("/analytics/upcoming-deadlines"),
+
+  getHighPriorityTasks: () =>
+    apiClient.get<ApiResponse<unknown[]>>("/analytics/high-priority-tasks"),
+
+  getProgressTrend: () =>
+    apiClient.get<ApiResponse<{ week: string; created: number; completed: number }[]>>(
+      "/analytics/progress-trend"
+    ),
 };
 
 // ─── Team ─────────────────────────────────────────────────────────────────────

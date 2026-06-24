@@ -188,29 +188,36 @@ export default function AnalyticsPage() {
     overdueTasks: number;
   } } | undefined)?.kpis;
 
-  const rawPriority = (priorityData?.data?.data as { priority: string; count: number }[] | undefined) ?? [];
+  const rawPriority = Array.isArray(priorityData?.data?.data)
+  ? (priorityData.data.data as { priority: string; count: number }[])
+  : [];
   const priorityChartData = [
     { name: "High", value: rawPriority.find((p) => p.priority === "high")?.count ?? 0, color: PRIORITY_COLORS.high },
     { name: "Medium", value: rawPriority.find((p) => p.priority === "medium")?.count ?? 0, color: PRIORITY_COLORS.medium },
     { name: "Low", value: rawPriority.find((p) => p.priority === "low")?.count ?? 0, color: PRIORITY_COLORS.low },
   ];
 
-  const rawStatus = (statusData?.data?.data as { status: string; count: number }[] | undefined) ?? [];
+const rawStatus = Array.isArray(statusData?.data?.data)
+  ? (statusData.data.data as { status: string; count: number }[])
+  : [];
   const statusChartData = [
     { name: "Todo", value: rawStatus.find((s) => s.status === "todo")?.count ?? 0, color: STATUS_COLORS.todo },
     { name: "In Progress", value: rawStatus.find((s) => s.status === "in_progress")?.count ?? 0, color: STATUS_COLORS.in_progress },
     { name: "Completed", value: rawStatus.find((s) => s.status === "completed")?.count ?? 0, color: STATUS_COLORS.completed },
   ];
 
-  const trendChartData = (trendData?.data?.data as { week: string; created: number; completed: number }[] | undefined) ?? [];
+const trendChartData = Array.isArray(trendData?.data?.data)
+  ? (trendData.data.data as { week: string; created: number; completed: number }[])
+  : [];
 
-  const workload = (workloadData?.data?.data as {
-    user: { id: string; name: string; avatarUrl?: string };
-    totalTasks: number;
-    completedTasks: number;
-    pendingTasks: number;
-  }[] | undefined) ?? [];
-
+const workload = Array.isArray(workloadData?.data?.data)
+  ? (workloadData.data.data as Array<{
+      user: { id: string; name: string; avatarUrl?: string };
+      totalTasks: number;
+      completedTasks: number;
+      pendingTasks: number;
+    }>)
+  : [];
   // For team productivity bar chart — members with at least 1 task
   const productivityChartData = workload
     .filter((m) => m.totalTasks > 0)
