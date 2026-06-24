@@ -143,6 +143,30 @@ export const activityApi = {
 export const analyticsApi = {
   getDashboard: () =>
     apiClient.get<ApiResponse<DashboardData>>("/analytics/dashboard"),
+
+  getTasksByPriority: () =>
+    apiClient.get<ApiResponse<{ priority: string; count: number }[]>>(
+      "/analytics/tasks-by-priority"
+    ),
+
+  getStatusDistribution: () =>
+    apiClient.get<ApiResponse<{ status: string; count: number }[]>>(
+      "/analytics/status-distribution"
+    ),
+
+  getProgressTrend: (params?: { weeks?: number }) =>
+    apiClient.get<ApiResponse<{ week: string; created: number; completed: number }[]>>(
+      "/analytics/progress-trend",
+      { params }
+    ),
+
+  getMemberWorkload: () =>
+    apiClient.get<ApiResponse<{
+      user: { id: string; name: string; avatarUrl?: string };
+      totalTasks: number;
+      completedTasks: number;
+      pendingTasks: number;
+    }[]>>("/analytics/member-workload"),
 };
 
 // ─── Team ─────────────────────────────────────────────────────────────────────
