@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
   const dash = dashData?.data?.data;
   const kpis = dash?.kpis;
-  const logs = logsData?.data?.data?.logs || [];
+  const logs = logsData?.data?.data|| [];
 
   // Chart data
   const rawPriority = (priorityApiData?.data?.data as { priority: string; count: number }[]) || [];
