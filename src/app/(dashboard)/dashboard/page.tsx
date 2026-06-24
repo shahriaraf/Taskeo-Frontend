@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
   const dash = dashData?.data?.data;
   const kpis = dash?.kpis;
-  const logs = logsData?.data?.data|| [];
+  const logs = logsData?.data?.data || [];
 
   // Chart data
   const rawPriority = (priorityApiData?.data?.data as { priority: string; count: number }[]) || [];
@@ -265,10 +265,10 @@ export default function DashboardPage() {
                             </span>
                           )}
                         </div>
-                        <Progress value={p.completionPercentage} />
+                        <Progress value={p.completionPercent} />
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <p className="text-sm font-bold text-[var(--text-primary)]">{p.completionPercentage}%</p>
+                        <p className="text-sm font-bold text-[var(--text-primary)]">{p.completionPercent}%</p>
                         <p className="text-[10px] text-[var(--text-muted)]">{p.pendingTasks} pending</p>
                       </div>
                     </div>
@@ -330,14 +330,14 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="pt-0">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                {memberWorkload.map((m,index) => {
+                {memberWorkload.map((m, index) => {
                   const pct = m.totalTasks > 0 ? Math.round((m.completedTasks / m.totalTasks) * 100) : 0;
                   return (
                     <div key={index} className="p-3 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-center">
-                      <Avatar name={m.user.name} src={m.user.avatarUrl} size="md" className="mx-auto mb-2" />
+                      <Avatar name={m.user.name} src={m.user.avatarUrl ?? undefined} size="md" className="mx-auto mb-2" />
                       <p className="text-xs font-medium text-[var(--text-primary)] truncate mb-1">{m.user.name}</p>
-                      <Progress value={pct} className="mb-1.5" />
-                      <p className="text-[10px] text-[var(--text-muted)]">{m.completedTasks}/{m.totalTasks} done</p>
+                      <Progress value={m.completedTasks / m.totalTasks * 100 || 0} />
+                      <p className="text-sm font-bold text-[var(--text-primary)]">{Math.round((m.completedTasks / m.totalTasks) * 100) || 0}%</p>
                     </div>
                   );
                 })}

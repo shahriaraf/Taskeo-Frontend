@@ -121,23 +121,31 @@ export interface DashboardData {
     completedTasks: number;
     pendingTasks: number;
     overdueTasks: number;
-    completionRate?: number;
   };
-  // Add other fields your dashboard page accesses on `dash`
-  // For example:
-  upcomingDeadlines?: Array<{
-    id: string;
-    title: string;
-    dueDate: string;
-    project: { id: string; name: string };
-  }>;
-  recentProjects?: Array<{
+
+  projectSummaries: Array<{
     id: string;
     name: string;
-    completionPercentage: number;
+    status: string;
+    deadline: string;
+    daysUntilDeadline: number;
+    totalTasks: number;
+    completedTasks: number;
+    pendingTasks: number;
+    completionPercent: number;  // ← note: backend uses "completionPercent"
+    isOverdue: boolean;
   }>;
-  tasksByStatus?: Array<{ status: string; count: number }>;
-  tasksByPriority?: Array<{ priority: string; count: number }>;
+
+  memberWorkload: Array<{
+    user: {
+      id: string;
+      name: string;
+      avatarUrl: string | null;
+    };
+    totalTasks: number;
+    completedTasks: number;
+    pendingTasks: number;
+  }>;
 }
 
 export interface ApiResponse<T> {
