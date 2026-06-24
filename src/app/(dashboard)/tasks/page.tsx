@@ -415,12 +415,12 @@ export default function TasksPage() {
               ))}
             </div>
 
-            {meta && meta.totalPages > 1 && (
+            {meta && (meta.totalPages ?? 0) > 1 && (
               <div className="flex items-center justify-center gap-2 mt-8">
                 <Button variant="secondary" size="sm" disabled={page <= 1}
                   onClick={() => { setPage((p) => p - 1); clearAll(); }}>Previous</Button>
-                <span className="text-xs text-[var(--text-muted)]">Page {page} of {meta.totalPages}</span>
-                <Button variant="secondary" size="sm" disabled={page >= meta.totalPages}
+                <span className="text-xs text-[var(--text-muted)]">Page {page} of {meta.totalPages ?? 1}</span>
+                <Button variant="secondary" size="sm" disabled={page >= (meta.totalPages ?? 1)}
                   onClick={() => { setPage((p) => p + 1); clearAll(); }}>Next</Button>
               </div>
             )}

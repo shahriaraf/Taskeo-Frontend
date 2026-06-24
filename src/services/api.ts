@@ -78,6 +78,9 @@ export const tasksApi = {
   updateTaskStatus: (id: string, status: string) =>
     apiClient.patch<ApiResponse<Task>>(`/tasks/${id}/status`, { status }),
 
+  updateStatus: (id: string, status: string) =>
+    apiClient.patch<ApiResponse<Task>>(`/tasks/${id}/status`, { status }),
+
   remove: (id: string) => apiClient.delete(`/tasks/${id}`),
 
   // ── NEW: Sub-tasks ──────────────────────────────────────────────────────────
@@ -109,7 +112,10 @@ export const tasksApi = {
 // ─── Comments ─────────────────────────────────────────────────────────────────
 export const commentsApi = {
   getByTask: (taskId: string, params?: { page?: number; limit?: number }) =>
-    apiClient.get<ApiResponse<Comment[]>>(`/comments/task/${taskId}`, { params }),
+    apiClient.get<ApiResponse<{ comments: Comment[]; total: number; page: number; limit: number }>>(
+      `/comments/task/${taskId}`,
+      { params }
+    ),
 
   create: (data: { taskId: string; content: string }) =>
     apiClient.post<ApiResponse<Comment>>("/comments", data),
@@ -123,7 +129,10 @@ export const commentsApi = {
 // ─── Notifications ─────────────────────────────────────────────────────────────
 export const notificationsApi = {
   getAll: (params?: { page?: number; limit?: number; unreadOnly?: boolean }) =>
-    apiClient.get<ApiResponse<Notification[]>>("/notifications", { params }),
+    apiClient.get<ApiResponse<{ notifications: Notification[]; total: number; unreadCount: number }>>(
+      "/notifications",
+      { params }
+    ),
 
   markRead: (id: string) =>
     apiClient.patch(`/notifications/${id}/read`),
@@ -173,10 +182,24 @@ export const analyticsApi = {
 export const teamApi = {
   getAll: (params?: Record<string, unknown>) =>
     apiClient.get<ApiResponse<User[]>>("/team", { params }),
+
+  getMembers: (projectId: string) =>
+    apiClient.get<ApiResponse<Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }>>(
+      `/team/project/${projectId}/members`
+    ),
+
+  searchUsers: (q: string) =>
+    apiClient.get<ApiResponse<User[]>>("/team/users/search", { params: { q } }),
+
+  addMember: (data: { projectId: string; userId: string; role: string }) =>
+    apiClient.post<ApiResponse<unknown>>("/team/project/members", data),
 };
 
 // ─── Attachments ─────────────────────────────────────────────────────────────
 export const attachmentsApi = {
+  getByTask: (taskId: string) =>
+    apiClient.get<ApiResponse<Attachment[]>>(`/attachments/task/${taskId}`),
+
   upload: (taskId: string, file: File) => {
     const form = new FormData();
     form.append("file", file);
@@ -204,6 +227,9 @@ export const usersApi = {
 
   getOne: (id: string) =>
     apiClient.get<ApiResponse<User>>(`/users/${id}`),
+
+  update: (id: string, data: Partial<{ name: string; email: string; role: string }>) =>
+    apiClient.patch<ApiResponse<User>>(`/users/${id}`, data),
 
   getStats: (id: string) =>
     apiClient.get<ApiResponse<{

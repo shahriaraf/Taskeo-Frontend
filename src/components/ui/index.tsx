@@ -162,11 +162,11 @@ export function Skeleton({ className }: { className?: string }) {
 interface AvatarProps {
   src?: string;
   name: string;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
 }
 
-const avatarSizes = { sm: "h-7 w-7 text-xs", md: "h-9 w-9 text-sm", lg: "h-11 w-11 text-base", xl: "h-14 w-14 text-lg" };
+const avatarSizes = { xs: "h-5 w-5 text-[10px]", sm: "h-7 w-7 text-xs", md: "h-9 w-9 text-sm", lg: "h-11 w-11 text-base", xl: "h-14 w-14 text-lg" };
 
 const avatarColors = [
   "from-blue-500 to-violet-500",

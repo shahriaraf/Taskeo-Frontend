@@ -133,12 +133,12 @@ export function GlobalSearch() {
             )}
 
             {/* Projects */}
-            {data?.projects.length > 0 && (
+            {(data?.projects ?? []).length > 0 && (
               <div>
                 <p className="px-4 py-1.5 text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
                   Projects
                 </p>
-                {data.projects.map((p: any) => (
+                {(data?.projects ?? []).map((p: any) => (
                   <button
                     key={p.id}
                     onClick={() => navigate(`/projects/${p.id}`)}
@@ -171,12 +171,12 @@ export function GlobalSearch() {
             )}
 
             {/* Tasks */}
-            {data?.tasks.length > 0 && (
+            {(data?.tasks ?? []).length > 0 && (
               <div>
                 <p className="px-4 py-1.5 text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
                   Tasks
                 </p>
-                {data.tasks.map((t: any) => (
+                {(data?.tasks ?? []).map((t: any) => (
                   <button
                     key={t.id}
                     onClick={() => navigate(`/tasks/${t.id}`)}
