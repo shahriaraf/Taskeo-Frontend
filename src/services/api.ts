@@ -184,7 +184,7 @@ export const teamApi = {
     apiClient.get<ApiResponse<User[]>>("/team", { params }),
 
   getMembers: (projectId: string) =>
-    apiClient.get<ApiResponse<Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }>>(
+    apiClient.get<Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }>>(
       `/team/project/${projectId}/members`
     ),
 

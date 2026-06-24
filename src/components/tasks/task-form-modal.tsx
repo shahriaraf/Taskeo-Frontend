@@ -87,14 +87,18 @@ export function TaskFormModal({
 
   const { data: membersData } = useQuery({
     queryKey: ["project-members", watchedProjectId],
-    queryFn: () => teamApi.getMembers(watchedProjectId!),
+    queryFn: async () => {
+      if (!watchedProjectId) return [] as Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }>;
+      const res = await teamApi.getMembers(watchedProjectId);
+      return Array.isArray(res.data)
+        ? (res.data as Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }>)
+        : [];
+    },
     enabled: !!watchedProjectId,
     staleTime: 0, // always fresh — member list changes often
   });
   const members: Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }> =
-    Array.isArray(membersData?.data?.data)
-      ? (membersData!.data!.data as unknown as Array<{ user: Pick<User, "id" | "name" | "avatarUrl"> }>)
-      : [];
+    Array.isArray(membersData) ? membersData : [];
 
   // Reset form when modal opens/closes
   useEffect(() => {
